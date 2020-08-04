@@ -18,7 +18,7 @@ import java.time.Instant;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+    private Long post_id;
     @NotBlank(message = "Post Name cannot be empty or Null")
     private String postName;
     @Nullable
