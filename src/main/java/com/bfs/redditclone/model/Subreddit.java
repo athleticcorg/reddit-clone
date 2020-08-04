@@ -23,6 +23,7 @@ public class Subreddit {
     private String name;
     @NotBlank(message = "Description is required")
     private String description;
+    // because of this OneToMany, there is a conjunction table created
     @OneToMany(fetch = FetchType.LAZY)
     private List<Post> posts;
     private Instant createdDate;
