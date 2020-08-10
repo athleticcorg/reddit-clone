@@ -1,5 +1,6 @@
 package com.bfs.redditclone.service;
 
+import com.bfs.redditclone.dto.LoginRequest;
 import com.bfs.redditclone.dto.RegisterRequest;
 import com.bfs.redditclone.exceptions.SpringRedditException;
 import com.bfs.redditclone.model.NotificationEmail;
@@ -8,6 +9,10 @@ import com.bfs.redditclone.model.VerificationToken;
 import com.bfs.redditclone.repository.UserRepository;
 import com.bfs.redditclone.repository.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -64,5 +70,11 @@ public class AuthService {
         User user = userRepository.findByUserId(userId).orElseThrow(() -> new SpringRedditException("User not found with name - " + userId));
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    public void login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
     }
 }
