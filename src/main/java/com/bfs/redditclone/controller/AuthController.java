@@ -1,5 +1,6 @@
 package com.bfs.redditclone.controller;
 
+import com.bfs.redditclone.annotation.LogExecutionTime;
 import com.bfs.redditclone.dto.AuthenticationResponse;
 import com.bfs.redditclone.dto.LoginRequest;
 import com.bfs.redditclone.dto.RegisterRequest;
@@ -19,6 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
+    @LogExecutionTime
     public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
         authService.signup(registerRequest);
         return new ResponseEntity<>("User Registration Successful", OK);

@@ -1,5 +1,6 @@
 package com.bfs.redditclone.service;
 
+import com.bfs.redditclone.annotation.LogExecutionTime;
 import com.bfs.redditclone.exceptions.SpringRedditException;
 import com.bfs.redditclone.model.NotificationEmail;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,9 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final MailContentBuilder mailContentBuilder;
 
-    // We can also use RabbitMQ or ActiveMQ, but they are too heavy weight
+    // We can also use RabbitMQ or ActiveMQ, but they are too heavy weight for this application
     @Async
+    @LogExecutionTime
     void sendMail(NotificationEmail notificationEmail) {
         // this is a functional interface
         MimeMessagePreparator messagePreparator = mimeMessage -> {
