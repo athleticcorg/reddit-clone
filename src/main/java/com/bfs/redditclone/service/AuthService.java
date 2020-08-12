@@ -36,13 +36,17 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthService.class);
+
     @Transactional
     public void signup(RegisterRequest registerRequest) {
         User user = User.builder().username(registerRequest.getUsername()).email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .created(Instant.now()).enabled(false).build();
         userRepository.save(user);
-
+        log.trace("saved user into database");
+        log.trace(System.getProperty("java.io.tmpdir"));
+//        log.info("saved user into database info");
         String token = generateVerificationToken(user);
         // here we have to connect to gmail and send the email
         // which will take a long time. We don't want the User to
